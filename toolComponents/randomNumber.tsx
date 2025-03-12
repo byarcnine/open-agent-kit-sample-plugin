@@ -1,6 +1,13 @@
+import { ToolResult } from "ai";
 import React from "react";
+import type {
+  RandomNumberToolParams,
+  RandomNumberToolResult,
+} from "../tools/randomNumber";
 
-export default (props) => {
+export default (
+  props: ToolResult<string, RandomNumberToolParams, RandomNumberToolResult>
+) => {
   return (
     <div className="text-sm text-gray-500 bg-gray-100 p-2 rounded-md">
       Generating a random number 🧙‍♂️.

@@ -4,11 +4,20 @@ import { z } from "zod";
 import { oak } from "../provider";
 import { PluginConfig } from "../types";
 
+const parameters = z.object({});
+
+export type RandomNumberToolParams = z.infer<typeof parameters>;
+export type RandomNumberToolResult = {
+  min: number;
+  max: number;
+  generatedNumber: number;
+};
+
 const generateRandomNumber = ({ agentId }: ToolParams) =>
   tool({
     description: "Generate a random number",
-    parameters: z.object({}),
-    execute: async () => {
+    parameters,
+    execute: async (): Promise<RandomNumberToolResult> => {
       const config = (await oak.getPluginConfig(agentId)) as
         | PluginConfig
         | undefined;
