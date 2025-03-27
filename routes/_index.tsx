@@ -5,14 +5,10 @@ import { PluginConfig } from "../types";
 import OAKProvider from "@open-agent-kit/core";
 import pkg from "../package.json";
 
-export const action = async ({
-  request,
-  params,
-  context,
-}: ActionFunctionArgs) => {
+export const action = async ({ request, params }: ActionFunctionArgs) => {
   const formData = await request.formData();
   const agentId = params.agentId as string;
-  const oak = OAKProvider(context.config, pkg.name);
+  const oak = OAKProvider(global.config, pkg.name);
 
   const min = formData.get("min");
   const max = formData.get("max");
@@ -22,9 +18,9 @@ export const action = async ({
   return { success: true };
 };
 
-export const loader = async ({ params, context }: LoaderFunctionArgs) => {
+export const loader = async ({ params }: LoaderFunctionArgs) => {
   const agentId = params.agentId as string;
-  const oak = OAKProvider(context.config, pkg.name);
+  const oak = OAKProvider(global.config, pkg.name);
 
   const config = (await oak.getPluginConfig(agentId)) as
     | PluginConfig
