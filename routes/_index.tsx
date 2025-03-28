@@ -3,12 +3,13 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import { Form, useActionData, useLoaderData } from "react-router";
 import { PluginConfig } from "../types";
 import OAKProvider from "@open-agent-kit/core";
+import { withOakContext } from "@open-agent-kit/core/utils/wrapWithContext";
 import pkg from "../package.json";
 
-export const action = async ({ request, params }: ActionFunctionArgs) => {
+export const action = withOakContext(async ({ request, params, context }: ActionFunctionArgs) => {
   const formData = await request.formData();
   const agentId = params.agentId as string;
-  const oak = OAKProvider(global.config, pkg.name);
+  const oak = OAKProvider(context.config, pkg.name);
 
   const min = formData.get("min");
   const max = formData.get("max");
@@ -16,17 +17,17 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   await oak.setPluginConfig(agentId, { min, max });
 
   return { success: true };
-};
+});
 
-export const loader = async ({ params }: LoaderFunctionArgs) => {
+export const loader = withOakContext(async ({ params, context }: LoaderFunctionArgs) => {
   const agentId = params.agentId as string;
-  const oak = OAKProvider(global.config, pkg.name);
+  const oak = OAKProvider(context.config, pkg.name);
 
   const config = (await oak.getPluginConfig(agentId)) as
     | PluginConfig
     | undefined;
   return { config };
-};
+});
 
 export default () => {
   const actionData = useActionData();
