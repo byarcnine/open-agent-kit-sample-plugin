@@ -12,5 +12,8 @@
     "@open-agent-kit/core": "*",
     "@react-router/dev": "^7.2.0",
     "ai": "^4.1.55"
+  },
+  "devDependencies": {
+    "vite-env-only": "^3.0.3"
   }
 }
