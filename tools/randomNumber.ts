@@ -2,8 +2,6 @@ import { ToolConfig, ToolParams } from "@open-agent-kit/core/app/types/tools";
 import { tool } from "ai";
 import { z } from "zod";
 import { PluginConfig } from "../types";
-import OAKProvider from "@open-agent-kit/core";
-import pkg from "../package.json";
 
 const parameters = z.object({});
 
@@ -14,12 +12,12 @@ export type RandomNumberToolResult = {
   generatedNumber: number;
 };
 
-const generateRandomNumber = ({ agentId, config }: ToolParams) =>
+const generateRandomNumber = ({ agentId, config, provider }: ToolParams) =>
   tool({
     description: "Generate a random number",
     parameters,
     execute: async (): Promise<RandomNumberToolResult> => {
-      const oak = OAKProvider(config, pkg.name);
+      const oak = provider;
       const pluginConfig = (await oak.getPluginConfig(agentId)) as
         | PluginConfig
         | undefined;
