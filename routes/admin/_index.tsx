@@ -1,30 +1,35 @@
 import React from "react";
 import { Form, useActionData, useLoaderData } from "react-router";
-import { PluginConfig } from "../types";
+import { PluginConfig } from "../../types";
 import { withOAKContext } from "@open-agent-kit/core/utils/withOAKContext";
+import { serverOnly$ } from "vite-env-only/macros";
 
-export const action = withOAKContext(async ({ request, params, context }) => {
-  const formData = await request.formData();
-  const agentId = params.agentId as string;
-  const oak = context.provider;
+export const action = serverOnly$(
+  withOAKContext(async ({ request, params, context }) => {
+    const formData = await request.formData();
+    const agentId = params.agentId as string;
+    const oak = context.provider;
 
-  const min = formData.get("min");
-  const max = formData.get("max");
+    const min = formData.get("min");
+    const max = formData.get("max");
 
-  await oak.setPluginConfig(agentId, { min, max });
+    await oak.setPluginConfig(agentId, { min, max });
 
-  return { success: true };
-});
+    return { success: true };
+  })
+)!;
 
-export const loader = withOAKContext(async ({ params, context }) => {
-  const agentId = params.agentId as string;
-  const oak = context.provider;
+export const loader = serverOnly$(
+  withOAKContext(async ({ params, context }) => {
+    const agentId = params.agentId as string;
+    const oak = context.provider;
 
-  const config = (await oak.getPluginConfig(agentId)) as
-    | PluginConfig
-    | undefined;
-  return { config };
-});
+    const config = (await oak.getPluginConfig(agentId)) as
+      | PluginConfig
+      | undefined;
+    return { config };
+  })
+)!;
 
 export default () => {
   const actionData = useActionData();

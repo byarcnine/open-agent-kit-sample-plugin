@@ -9,9 +9,9 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@open-agent-kit/core": "*",
+    "@open-agent-kit/core": "^0.1.21",
     "@react-router/dev": "^7.2.0",
-    "ai": "^4.1.55"
+    "ai": "^4.3.16"
   },
   "devDependencies": {
     "vite-env-only": "^3.0.3"
