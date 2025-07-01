@@ -1,18 +1,15 @@
 import React from "react";
-import { withOAKContext } from "@open-agent-kit/core/utils/withOAKContext";
-import { useLoaderData } from "react-router";
-import { serverOnly$ } from "vite-env-only/macros";
+import { LoaderFunctionArgs, useLoaderData } from "react-router";
+import { oakContext } from "@open-agent-kit/core/app/lib/middleware/oakMiddleware.server";
 
-export const loader = serverOnly$(
-  withOAKContext(async ({ params, context }) => {
-    const agentId = params.agentId as string;
-    const oak = context.provider;
-    return {
-      agentId,
-      config: await oak.getPluginConfig(agentId),
-    };
-  })
-)!;
+export const loader = async ({ params, context }: LoaderFunctionArgs) => {
+  const agentId = params.agentId as string;
+  const { provider } = context.get(oakContext);
+  return {
+    agentId,
+    config: await provider.getPluginConfig(agentId),
+  };
+};
 
 const ChatIndexRoute = () => {
   const { agentId, config } = useLoaderData();
